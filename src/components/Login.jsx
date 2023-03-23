@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
+import Alert from "react-bootstrap/Alert";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -12,19 +12,30 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router";
 import { Nav } from "react-bootstrap";
-
+import * as yup from "yup";
+import { useFormik } from "formik";
 const theme = createTheme();
 
+const loginValidationSchema = yup.object({
+  email: yup.string().required("Email Id is Mandatory").email(),
+  password: yup.string().required("Password is Mandatory"),
+});
 const Login = () => {
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const loginFunction = (loginData) => {
+    console.log(loginData);
   };
+  const { handleSubmit, handleBlur, handleChange, touched, errors, values } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: loginValidationSchema,
+      onSubmit: (loginData) => {
+        loginFunction(loginData);
+      },
+    });
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -76,8 +87,15 @@ const Login = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={values.email}
+                error={touched.email && errors.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 autoFocus
               />
+              {touched.email && errors.email ? (
+                <Alert variant="danger">{errors.email}</Alert>
+              ) : null}
               <TextField
                 margin="normal"
                 required
@@ -87,8 +105,14 @@ const Login = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={values.password}
+                error={touched.password && errors.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
-
+              {touched.password && errors.password ? (
+                <Alert variant="danger">{errors.password}</Alert>
+              ) : null}
               <Button
                 type="submit"
                 fullWidth

@@ -3,7 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -12,19 +11,44 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router";
 import { Nav } from "react-bootstrap";
+import Alert from "react-bootstrap/Alert";
+import * as yup from "yup";
+import { useFormik } from "formik";
 
 const theme = createTheme();
-
+const userValidationSchema = yup.object({
+  email: yup
+    .string()
+    .email("Should be a Valid Email")
+    .required("Email is Mandatory"),
+  fname: yup.string().required("Please Enter Your First Name"),
+  lname: yup.string().required("Please Enter Your Last Name"),
+  password: yup
+    .string()
+    .required("Password is Mandatory")
+    .min(8, "Must be atleast 8 Characters Long")
+    .max(12, "Not More than 12 Characters"),
+  userType: yup.string().required(),
+});
 const Registration = () => {
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const registerUserFunction = (userData) => {
+    console.log(userData);
   };
+  const { handleSubmit, handleChange, handleBlur, touched, errors, values } =
+    useFormik({
+      initialValues: {
+        email: "",
+        fname: "",
+        lname: "",
+        password: "",
+        userType: "",
+      },
+      validationSchema: userValidationSchema,
+      onSubmit: (userData) => {
+        registerUserFunction(userData);
+      },
+    });
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -65,19 +89,26 @@ const Registration = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
               sx={{ mt: 1 }}
+              onSubmit={handleSubmit}
             >
               <TextField
                 margin="normal"
                 required
                 fullWidth
+                value={values.email}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.email && errors.email}
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 autoFocus
               />
+              {touched.email && errors.email ? (
+                <Alert variant="danger">{errors.email}</Alert>
+              ) : null}
               <TextField
                 margin="normal"
                 required
@@ -86,7 +117,14 @@ const Registration = () => {
                 label="First Name"
                 type="text"
                 id="fname"
+                value={values.fname}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.fname && errors.fname}
               />
+              {touched.fname && errors.fname ? (
+                <Alert variant="danger">{errors.fname}</Alert>
+              ) : null}
               <TextField
                 margin="normal"
                 required
@@ -95,7 +133,14 @@ const Registration = () => {
                 label="Last Name"
                 type="text"
                 id="lname"
+                value={values.lname}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.lname && errors.lname}
               />
+              {touched.lname && errors.lname ? (
+                <Alert variant="danger">{errors.lname}</Alert>
+              ) : null}
               <TextField
                 margin="normal"
                 required
@@ -105,8 +150,14 @@ const Registration = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={values.password}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.password && errors.password}
               />
-
+              {touched.password && errors.password ? (
+                <Alert variant="danger">{errors.password}</Alert>
+              ) : null}
               <TextField
                 margin="normal"
                 required
@@ -115,7 +166,14 @@ const Registration = () => {
                 label="User Type"
                 type="text"
                 id="userType"
+                value={values.userType}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.userType && errors.userType}
               />
+              {touched.userType && errors.userType ? (
+                <Alert variant="danger">{errors.userType}</Alert>
+              ) : null}
               <Button
                 type="submit"
                 fullWidth
