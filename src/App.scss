@@ -12,3 +12,13 @@
   text-decoration: underline;
   color: rgb(53, 53, 109);
 }
+.success-container {
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.error-container {
+  margin: 1%;
+  padding: 1%;
+}

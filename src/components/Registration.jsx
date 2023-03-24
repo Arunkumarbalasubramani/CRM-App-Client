@@ -1,4 +1,4 @@
-import * as React from "react";
+import { React, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,7 +14,8 @@ import { Nav } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import * as yup from "yup";
 import { useFormik } from "formik";
-
+import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 const theme = createTheme();
 const userValidationSchema = yup.object({
   email: yup
@@ -31,10 +32,30 @@ const userValidationSchema = yup.object({
   userType: yup.string().required(),
 });
 const Registration = () => {
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
-  const registerUserFunction = (userData) => {
-    console.log(userData);
+  const registerUserFunction = async (userData) => {
+    try {
+      setLoading(true);
+      await axios.post("http://localhost:5000/users/register_user", userData);
+      setSuccess(true);
+      setLoading(false);
+    } catch (error) {
+      if (error?.response) {
+        setErrorMsg("No Server Response");
+        setLoading(false);
+      } else if (error?.response.status === 404) {
+        setErrorMsg("User Already Found");
+        setLoading(false);
+      } else {
+        setErrorMsg(error.response.data.Error);
+        setLoading(false);
+      }
+    }
   };
+
   const { handleSubmit, handleChange, handleBlur, touched, errors, values } =
     useFormik({
       initialValues: {
@@ -86,124 +107,135 @@ const Registration = () => {
             <Typography component="h1" variant="h5">
               Register a New User
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              sx={{ mt: 1 }}
-              onSubmit={handleSubmit}
-            >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                value={values.email}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.email && errors.email}
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              {touched.email && errors.email ? (
-                <Alert variant="danger">{errors.email}</Alert>
-              ) : null}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="fname"
-                label="First Name"
-                type="text"
-                id="fname"
-                value={values.fname}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.fname && errors.fname}
-              />
-              {touched.fname && errors.fname ? (
-                <Alert variant="danger">{errors.fname}</Alert>
-              ) : null}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="lname"
-                label="Last Name"
-                type="text"
-                id="lname"
-                value={values.lname}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.lname && errors.lname}
-              />
-              {touched.lname && errors.lname ? (
-                <Alert variant="danger">{errors.lname}</Alert>
-              ) : null}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={values.password}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.password && errors.password}
-              />
-              {touched.password && errors.password ? (
-                <Alert variant="danger">{errors.password}</Alert>
-              ) : null}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="userType"
-                label="User Type"
-                type="text"
-                id="userType"
-                value={values.userType}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.userType && errors.userType}
-              />
-              {touched.userType && errors.userType ? (
-                <Alert variant="danger">{errors.userType}</Alert>
-              ) : null}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Register the User
-              </Button>
-              <div className="further-actions">
-                <Nav.Link
-                  variant="body2"
-                  onClick={() => navigate("/login")}
-                  className="further-link"
-                >
-                  Already Registered?
-                </Nav.Link>
-                <Nav.Link
-                  variant="body2"
-                  onClick={() => navigate("/user/resetpassword")}
-                  className="further-link"
-                >
-                  {"Forgot Password"}
-                </Nav.Link>
+            {loading ? <CircularProgress color="success" /> : null}
+            {errorMsg ? (
+              <div className="error-container">
+                <Alert variant="danger">{errorMsg}</Alert>
               </div>
-            </Box>
+            ) : null}
+            {success ? (
+              <div className="success-container">
+                <h1>User Registered Successfully</h1>
+              </div>
+            ) : (
+              <Box
+                component="form"
+                noValidate
+                sx={{ mt: 1 }}
+                onSubmit={handleSubmit}
+              >
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  value={values.email}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={touched.email && errors.email}
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                />
+                {touched.email && errors.email ? (
+                  <Alert variant="danger">{errors.email}</Alert>
+                ) : null}
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="fname"
+                  label="First Name"
+                  type="text"
+                  id="fname"
+                  value={values.fname}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={touched.fname && errors.fname}
+                />
+                {touched.fname && errors.fname ? (
+                  <Alert variant="danger">{errors.fname}</Alert>
+                ) : null}
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="lname"
+                  label="Last Name"
+                  type="text"
+                  id="lname"
+                  value={values.lname}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={touched.lname && errors.lname}
+                />
+                {touched.lname && errors.lname ? (
+                  <Alert variant="danger">{errors.lname}</Alert>
+                ) : null}
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  value={values.password}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={touched.password && errors.password}
+                />
+                {touched.password && errors.password ? (
+                  <Alert variant="danger">{errors.password}</Alert>
+                ) : null}
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="userType"
+                  label="User Type"
+                  type="text"
+                  id="userType"
+                  value={values.userType}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={touched.userType && errors.userType}
+                />
+                {touched.userType && errors.userType ? (
+                  <Alert variant="danger">{errors.userType}</Alert>
+                ) : null}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Register the User
+                </Button>
+                <div className="further-actions">
+                  <Nav.Link
+                    variant="body2"
+                    onClick={() => navigate("/login")}
+                    className="further-link"
+                  >
+                    Already Registered?
+                  </Nav.Link>
+                  <Nav.Link
+                    variant="body2"
+                    onClick={() => navigate("/user/resetpassword")}
+                    className="further-link"
+                  >
+                    {"Forgot Password"}
+                  </Nav.Link>
+                </div>
+              </Box>
+            )}
           </Box>
         </Grid>
       </Grid>
     </ThemeProvider>
   );
 };
-
 export default Registration;
