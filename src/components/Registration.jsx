@@ -16,6 +16,12 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
+import LoginIcon from "@mui/icons-material/Login";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Form from "react-bootstrap/Form";
+import Dropdown from "react-bootstrap/Dropdown";
+
 const theme = createTheme();
 const userValidationSchema = yup.object({
   email: yup
@@ -29,13 +35,15 @@ const userValidationSchema = yup.object({
     .required("Password is Mandatory")
     .min(8, "Must be atleast 8 Characters Long")
     .max(12, "Not More than 12 Characters"),
-  userType: yup.string().required(),
+  role: yup.string().required(),
 });
+
 const Registration = () => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
+
   const registerUserFunction = async (userData) => {
     try {
       setLoading(true);
@@ -43,7 +51,7 @@ const Registration = () => {
       setSuccess(true);
       setLoading(false);
     } catch (error) {
-      if (error?.response) {
+      if (!error?.response) {
         setErrorMsg("No Server Response");
         setLoading(false);
       } else if (error?.response.status === 404) {
@@ -63,7 +71,7 @@ const Registration = () => {
         fname: "",
         lname: "",
         password: "",
-        userType: "",
+        role: "",
       },
       validationSchema: userValidationSchema,
       onSubmit: (userData) => {
@@ -116,112 +124,103 @@ const Registration = () => {
             {success ? (
               <div className="success-container">
                 <h1>User Registered Successfully</h1>
+                <Tooltip title="Back">
+                  <IconButton size="large">
+                    <LoginIcon onClick={() => navigate("/admin/dashboard")} />
+                  </IconButton>
+                </Tooltip>
               </div>
             ) : (
-              <Box
-                component="form"
-                noValidate
-                sx={{ mt: 1 }}
-                onSubmit={handleSubmit}
-              >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  value={values.email}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={touched.email && errors.email}
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                />
-                {touched.email && errors.email ? (
-                  <Alert variant="danger">{errors.email}</Alert>
-                ) : null}
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="fname"
-                  label="First Name"
-                  type="text"
-                  id="fname"
-                  value={values.fname}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={touched.fname && errors.fname}
-                />
-                {touched.fname && errors.fname ? (
-                  <Alert variant="danger">{errors.fname}</Alert>
-                ) : null}
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="lname"
-                  label="Last Name"
-                  type="text"
-                  id="lname"
-                  value={values.lname}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={touched.lname && errors.lname}
-                />
-                {touched.lname && errors.lname ? (
-                  <Alert variant="danger">{errors.lname}</Alert>
-                ) : null}
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  value={values.password}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={touched.password && errors.password}
-                />
-                {touched.password && errors.password ? (
-                  <Alert variant="danger">{errors.password}</Alert>
-                ) : null}
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="userType"
-                  label="User Type"
-                  type="text"
-                  id="userType"
-                  value={values.userType}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={touched.userType && errors.userType}
-                />
-                {touched.userType && errors.userType ? (
-                  <Alert variant="danger">{errors.userType}</Alert>
-                ) : null}
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Register the User
-                </Button>
-                <div className="further-actions">
-                  <Nav.Link
-                    variant="body2"
-                    onClick={() => navigate("/login")}
-                    className="further-link"
+              <div className="form-container">
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3">
+                    <TextField
+                      id="outlined-basic"
+                      label="Email"
+                      variant="outlined"
+                      className="form-input"
+                      value={values.email}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      name="email"
+                      error={touched.email && errors.email}
+                    />
+                    {touched.email && errors.email ? (
+                      <Alert variant="danger">{errors.email}</Alert>
+                    ) : null}
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <TextField
+                      id="outlined-basic"
+                      label="First Name"
+                      variant="outlined"
+                      className="form-input"
+                      name="fname"
+                      type="text"
+                      value={values.fname}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={touched.fname && errors.fname}
+                    />
+                    {touched.fname && errors.fname ? (
+                      <Alert variant="danger">{errors.fname}</Alert>
+                    ) : null}
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <TextField
+                      id="outlined-basic"
+                      label="Last Name"
+                      variant="outlined"
+                      className="form-input"
+                      name="lname"
+                      type="text"
+                      value={values.lname}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={touched.lname && errors.lname}
+                    />
+                    {touched.lname && errors.lname ? (
+                      <Alert variant="danger">{errors.lname}</Alert>
+                    ) : null}
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <TextField
+                      id="outlined-basic"
+                      name="password"
+                      label="Password"
+                      type="password"
+                      value={values.password}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={touched.password && errors.password}
+                      variant="outlined"
+                      className="form-input"
+                    />
+                    {touched.password && errors.password ? (
+                      <Alert variant="danger">{errors.password}</Alert>
+                    ) : null}
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3 drop-down"
+                    value={values.role}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
                   >
-                    Already Registered?
-                  </Nav.Link>
+                    <label for="role">Choose a Role:</label>
+                    <select name="role" id="role">
+                      <option value="employee"></option>
+                      <option value="employee">Employee</option>
+                      <option value="manager">Manager</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </Form.Group>
+
+                  <Button variant="contained" size="large" type="submit">
+                    Submit
+                  </Button>
+                </Form>
+                <div className="further-actions">
                   <Nav.Link
                     variant="body2"
                     onClick={() => navigate("/user/resetpassword")}
@@ -230,7 +229,7 @@ const Registration = () => {
                     {"Forgot Password"}
                   </Nav.Link>
                 </div>
-              </Box>
+              </div>
             )}
           </Box>
         </Grid>

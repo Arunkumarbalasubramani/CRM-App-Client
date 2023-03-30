@@ -1,4 +1,4 @@
-import * as React from "react";
+import { React, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,6 +14,13 @@ import { useNavigate } from "react-router";
 import { Nav } from "react-bootstrap";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import Form from "react-bootstrap/Form";
+import CircularProgress from "@mui/material/CircularProgress";
+import HomeIcon from "@mui/icons-material/Home";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import axios from "axios";
+
 const theme = createTheme();
 
 const loginValidationSchema = yup.object({
@@ -22,8 +29,33 @@ const loginValidationSchema = yup.object({
 });
 const Login = () => {
   const navigate = useNavigate();
-  const loginFunction = (loginData) => {
-    console.log(loginData);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const loginFunction = async (loginData) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:5000/users/login",
+        loginData
+      );
+      setSuccess(true);
+      setLoading(false);
+    } catch (error) {
+      if (!error?.response) {
+        setErrorMsg("No Server Response");
+        setLoading(false);
+      } else if (error?.response.status === 404) {
+        setErrorMsg("User Not Found. Please Contact Admin");
+        setLoading(false);
+      } else if (error?.response.status === 403) {
+        setErrorMsg("Wrong Credentials");
+        setLoading(false);
+      } else {
+        setErrorMsg(error?.response.data.Error);
+        setLoading(false);
+      }
+    }
   };
   const { handleSubmit, handleBlur, handleChange, touched, errors, values } =
     useFormik({
@@ -73,71 +105,81 @@ const Login = () => {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
-            >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={values.email}
-                error={touched.email && errors.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                autoFocus
-              />
-              {touched.email && errors.email ? (
-                <Alert variant="danger">{errors.email}</Alert>
-              ) : null}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={values.password}
-                error={touched.password && errors.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.password && errors.password ? (
-                <Alert variant="danger">{errors.password}</Alert>
-              ) : null}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-              <div className="further-actions">
-                <Nav.Link
-                  variant="body2"
-                  onClick={() => navigate("/user/resetpassword")}
-                  className="further-link"
-                >
-                  Forgot password?
-                </Nav.Link>
-                <Nav.Link
-                  variant="body2"
-                  onClick={() => navigate("/user/register")}
-                  className="further-link"
-                >
-                  {"Register Here"}
-                </Nav.Link>
+            {loading ? <CircularProgress color="success" /> : null}
+            {errorMsg ? (
+              <div className="error-container">
+                <Alert variant="danger">{errorMsg}</Alert>
               </div>
-            </Box>
+            ) : null}
+            {success ? (
+              <div className="success-container">
+                <h1>User Logged In Successfully</h1>
+                <Tooltip title="Go to Home">
+                  <IconButton size="large">
+                    <HomeIcon onClick={() => navigate("/:userType/homepage")} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            ) : (
+              <div className="form-container">
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3">
+                    <TextField
+                      id="outlined-basic"
+                      label="Email"
+                      variant="outlined"
+                      className="form-input"
+                      value={values.email}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      name="email"
+                      error={touched.email && errors.email}
+                    />
+                    {touched.email && errors.email ? (
+                      <Alert variant="danger">{errors.email}</Alert>
+                    ) : null}
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <TextField
+                      id="outlined-basic"
+                      name="password"
+                      label="Password"
+                      type="password"
+                      value={values.password}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={touched.password && errors.password}
+                      variant="outlined"
+                      className="form-input"
+                    />
+                    {touched.password && errors.password ? (
+                      <Alert variant="danger">{errors.password}</Alert>
+                    ) : null}
+                  </Form.Group>
+
+                  <Button variant="contained" size="large" type="submit">
+                    Submit
+                  </Button>
+                </Form>
+                <div className="further-actions">
+                  <Nav.Link
+                    variant="body2"
+                    onClick={() => navigate("/user/register")}
+                    className="further-link"
+                  >
+                    Not Registered?
+                  </Nav.Link>
+                  <Nav.Link
+                    variant="body2"
+                    onClick={() => navigate("/user/resetpassword")}
+                    className="further-link"
+                  >
+                    {"Forgot Password"}
+                  </Nav.Link>
+                </div>
+              </div>
+            )}
           </Box>
         </Grid>
       </Grid>
