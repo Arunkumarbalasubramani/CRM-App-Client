@@ -1,11 +1,11 @@
 import "./App.scss";
 import { Routes, BrowserRouter, Route } from "react-router-dom";
 import Login from "./components/Login";
-import Registration from "./components/Registration";
-import Passwordreset from "./components/Passwordreset";
+import Registration from "./components/admin/Registration";
+import Passwordreset from "./components/admin/Passwordreset";
 import HomePage from "./components/HomePage";
-import ResetPasswordForm from "./components/ResetPasswordForm";
-import AdminDashboard from "./components/AdminDashboard";
+import ResetPasswordForm from "./components/admin/ResetPasswordForm";
+import AdminDashboard from "./components/admin/AdminDashboard";
 import ManagerDashboard from "./components/ManagerDashboard";
 import UserDashboard from "./components/UserDashboard";
 import CreateServiceRequest from "./components/CreateServiceRequest";
@@ -14,7 +14,8 @@ import CreateLeads from "./components/CreateLeads";
 import EditLeads from "./components/EditLeads";
 import CreateContact from "./components/CreateContact";
 import EditContact from "./components/EditContact";
-import EditUser from "./components/EditUser";
+import EditUser from "./components/admin/EditUser";
+import DeleteUser from "./components/admin/DeleteUser";
 function App() {
   return (
     <div className="App">
@@ -46,6 +47,7 @@ function App() {
           <Route path="/:role/contacts/add" element={<CreateContact />} />
           <Route path="/:role/contacts/edit" element={<EditContact />} />
           <Route path="/user/:useremail/edit" element={<EditUser />} />
+          <Route path="/user/:useremail/delete" element={<DeleteUser />} />
         </Routes>
       </BrowserRouter>
     </div>

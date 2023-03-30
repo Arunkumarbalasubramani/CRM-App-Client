@@ -295,7 +295,12 @@ function DashboardContent() {
                                 placement="right-start"
                               >
                                 <IconButton aria-label="delete" size="large">
-                                  <DeleteIcon fontSize="inherit" />
+                                  <DeleteIcon
+                                    fontSize="inherit"
+                                    onClick={() => {
+                                      navigate(`/user/${row.email}/delete`);
+                                    }}
+                                  />
                                 </IconButton>
                               </Tooltip>
                             </TableCell>
