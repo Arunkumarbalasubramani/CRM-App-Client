@@ -163,19 +163,11 @@ const Login = () => {
                   </Button>
                 </Form>
                 <div className="further-actions">
-                  <Nav.Link
-                    variant="body2"
-                    onClick={() => navigate("/user/register")}
-                    className="further-link"
-                  >
-                    Not Registered?
+                  <Nav.Link variant="body2" className="further-link">
+                    Not Registered? Contact Your Admin
                   </Nav.Link>
-                  <Nav.Link
-                    variant="body2"
-                    onClick={() => navigate("/user/resetpassword")}
-                    className="further-link"
-                  >
-                    {"Forgot Password"}
+                  <Nav.Link variant="body2" className="further-link">
+                    {"Forgot Password. Contact Your Admin"}
                   </Nav.Link>
                 </div>
               </div>

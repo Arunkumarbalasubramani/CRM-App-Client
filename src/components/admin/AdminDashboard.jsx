@@ -33,6 +33,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import PasswordIcon from "@mui/icons-material/Password";
 
 const drawerWidth = 240;
 
@@ -242,6 +243,7 @@ function DashboardContent() {
                           <StyledTableCell align="center">Role</StyledTableCell>
                           <StyledTableCell align="center"></StyledTableCell>
                           <StyledTableCell align="center"></StyledTableCell>
+                          <StyledTableCell align="center"></StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -299,6 +301,27 @@ function DashboardContent() {
                                     fontSize="inherit"
                                     onClick={() => {
                                       navigate(`/user/${row.email}/delete`);
+                                    }}
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell style={{ width: 160 }} align="center">
+                              <Tooltip
+                                title="Password reset"
+                                arrow
+                                placement="right-start"
+                              >
+                                <IconButton
+                                  aria-label="reset-password"
+                                  size="large"
+                                >
+                                  <PasswordIcon
+                                    fontSize="inherit"
+                                    onClick={() => {
+                                      navigate(
+                                        `/user/${row.email}/resetpassword`
+                                      );
                                     }}
                                   />
                                 </IconButton>

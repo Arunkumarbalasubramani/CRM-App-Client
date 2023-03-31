@@ -198,7 +198,7 @@ const EditForm = ({ userData }) => {
           <div className="further-actions">
             <Nav.Link
               variant="body2"
-              onClick={() => navigate("/user/resetpassword")}
+              onClick={() => navigate(`/user/${values.email}/resetpassword`)}
               className="further-link"
             >
               {"Reset Password"}

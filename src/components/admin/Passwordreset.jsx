@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Nav } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import * as yup from "yup";
@@ -20,12 +20,13 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 const theme = createTheme();
 const passwordValidationSchema = yup.object({
   email: yup.string().required("Email Id is Mandatory").email(),
 });
 const Passwordreset = () => {
+  const { useremail } = useParams();
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -59,7 +60,7 @@ const Passwordreset = () => {
   const { handleSubmit, handleBlur, handleChange, touched, errors, values } =
     useFormik({
       initialValues: {
-        email: "",
+        email: useremail,
       },
       validationSchema: passwordValidationSchema,
       onSubmit: (emailData) => {
@@ -112,9 +113,7 @@ const Passwordreset = () => {
             ) : null}
             {success ? (
               <div className="success-container">
-                <h1>
-                  We Have Sent A Verification Mail. Please Check Your Inbox
-                </h1>
+                <h1>We Have Sent A Verification Mail to the User .</h1>
                 <Tooltip title="Back">
                   <IconButton size="large">
                     <LoginIcon onClick={() => navigate("/login")} />
@@ -122,48 +121,44 @@ const Passwordreset = () => {
                 </Tooltip>
               </div>
             ) : (
-              <div className="form-container">
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                      autoFocus
-                      value={values.email}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.email && errors.email}
-                    />
-                    {touched.email && errors.email ? (
-                      <Alert variant="danger">{errors.email}</Alert>
-                    ) : null}
-                  </Form.Group>
-                  <Button variant="contained" size="large" type="submit">
-                    Submit
-                  </Button>
-                </Form>
-                <div className="further-actions">
-                  <Nav.Link
-                    variant="body2"
-                    onClick={() => navigate("/login")}
-                    className="further-link"
-                  >
-                    Password Remembered?
-                  </Nav.Link>
-                  <Nav.Link
-                    variant="body2"
-                    onClick={() => navigate("/user/register")}
-                    className="further-link"
-                  >
-                    {"Not a user"}
-                  </Nav.Link>
+              <>
+                <div className="form-container">
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3">
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.email && errors.email}
+                      />
+                      {touched.email && errors.email ? (
+                        <Alert variant="danger">{errors.email}</Alert>
+                      ) : null}
+                    </Form.Group>
+                    <Button variant="contained" size="large" type="submit">
+                      Submit
+                    </Button>
+                  </Form>
                 </div>
-              </div>
+                <Tooltip title="Go Back">
+                  <IconButton aria-label="delete" size="large">
+                    <ArrowBackIcon
+                      fontSize="inherit"
+                      onClick={() => {
+                        navigate(-1);
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
+              </>
             )}
           </Box>
         </Grid>

@@ -1,21 +1,24 @@
 import "./App.scss";
 import { Routes, BrowserRouter, Route } from "react-router-dom";
-import Login from "./components/Login";
+import Login from "./components/admin/Login";
 import Registration from "./components/admin/Registration";
 import Passwordreset from "./components/admin/Passwordreset";
-import HomePage from "./components/HomePage";
+
 import ResetPasswordForm from "./components/admin/ResetPasswordForm";
 import AdminDashboard from "./components/admin/AdminDashboard";
-import ManagerDashboard from "./components/ManagerDashboard";
-import UserDashboard from "./components/UserDashboard";
-import CreateServiceRequest from "./components/CreateServiceRequest";
-import EditServiceRequest from "./components/EditServiceRequest";
-import CreateLeads from "./components/CreateLeads";
-import EditLeads from "./components/EditLeads";
-import CreateContact from "./components/CreateContact";
-import EditContact from "./components/EditContact";
+import ManagerDashboard from "./components/manager/ManagerDashboard";
+import UserDashboard from "./components/user/UserDashboard";
 import EditUser from "./components/admin/EditUser";
 import DeleteUser from "./components/admin/DeleteUser";
+import CreateServiceRequest from "./components/manager/CreateServiceRequest";
+import EditServiceRequest from "./components/manager/EditServiceRequest";
+import CreateLeads from "./components/manager/CreateLeads";
+import EditLeads from "./components/manager/EditLeads";
+import CreateContact from "./components/manager/CreateContact";
+import EditContact from "./components/manager/EditContact";
+import ServiceRequests from "./components/manager/ServiceRequests";
+import Contacts from "./components/manager/Contacts";
+import Leads from "./components/manager/Leads";
 function App() {
   return (
     <div className="App">
@@ -23,9 +26,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/user/register" element={<Registration />} />
-          <Route path="/user/resetpassword" element={<Passwordreset />} />
+          <Route
+            path="/user/:useremail/resetpassword"
+            element={<Passwordreset />}
+          />
           <Route path="/login" element={<Login />} />
-          <Route path="/:userType/homepage" element={<HomePage />} />
+
           <Route
             path="/passwordreset/:id/:token"
             element={<ResetPasswordForm />}
@@ -48,6 +54,9 @@ function App() {
           <Route path="/:role/contacts/edit" element={<EditContact />} />
           <Route path="/user/:useremail/edit" element={<EditUser />} />
           <Route path="/user/:useremail/delete" element={<DeleteUser />} />
+          <Route path="/:role/service-requests" element={<ServiceRequests />} />
+          <Route path="/:role/contacts" element={<Contacts />} />
+          <Route path="/:role/leads" element={<Leads />} />
         </Routes>
       </BrowserRouter>
     </div>
