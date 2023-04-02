@@ -19,6 +19,7 @@ import EditContact from "./components/manager/EditContact";
 import ServiceRequests from "./components/manager/ServiceRequests";
 import Contacts from "./components/manager/Contacts";
 import Leads from "./components/manager/Leads";
+import MoreDetails from "./components/manager/MoreDetails";
 function App() {
   return (
     <div className="App">
@@ -57,6 +58,10 @@ function App() {
           <Route path="/:role/service-requests" element={<ServiceRequests />} />
           <Route path="/:role/contacts" element={<Contacts />} />
           <Route path="/:role/leads" element={<Leads />} />
+          <Route
+            path="/service-requests/:requestId"
+            element={<MoreDetails />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
