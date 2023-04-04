@@ -20,6 +20,7 @@ import ServiceRequests from "./components/manager/ServiceRequests";
 import Contacts from "./components/manager/Contacts";
 import Leads from "./components/manager/Leads";
 import MoreDetails from "./components/manager/MoreDetails";
+import DeletePage from "./components/manager/DeletePage";
 function App() {
   return (
     <div className="App">
@@ -46,13 +47,14 @@ function App() {
             element={<CreateServiceRequest />}
           />
           <Route
-            path="/:role/servicerequest/edit"
+            path="/:role/servicerequest/:id/edit"
             element={<EditServiceRequest />}
           />
+          <Route path="/:role/:type/:id/delete" element={<DeletePage />} />
           <Route path="/:role/leads/add" element={<CreateLeads />} />
-          <Route path="/:role/leads/edit" element={<EditLeads />} />
+          <Route path="/:role/leads/:id/edit" element={<EditLeads />} />
           <Route path="/:role/contacts/add" element={<CreateContact />} />
-          <Route path="/:role/contacts/edit" element={<EditContact />} />
+          <Route path="/:role/contacts/:id/edit" element={<EditContact />} />
           <Route path="/user/:useremail/edit" element={<EditUser />} />
           <Route path="/user/:useremail/delete" element={<DeleteUser />} />
           <Route path="/:role/service-requests" element={<ServiceRequests />} />

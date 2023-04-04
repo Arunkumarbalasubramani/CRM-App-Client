@@ -3,6 +3,7 @@ import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Box from "@mui/material/Box";
 
+import EditIcon from "@mui/icons-material/Edit";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -105,7 +106,7 @@ const Leads = () => {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -200,6 +201,7 @@ const Leads = () => {
                           Lead Source
                         </StyledTableCell>
                         <StyledTableCell align="center">Status</StyledTableCell>
+                        <StyledTableCell align="center"></StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -233,6 +235,19 @@ const Leads = () => {
                           </TableCell>
                           <TableCell style={{ width: 160 }} align="center">
                             {row.status.toUpperCase()}
+                          </TableCell>
+                          <TableCell style={{ width: 160 }} align="center">
+                            <Tooltip title="Edit" arrow placement="right-start">
+                              <IconButton
+                                aria-label="edit"
+                                size="large"
+                                onClick={() =>
+                                  navigate(`/:role/leads/${row._id}/edit`)
+                                }
+                              >
+                                <EditIcon fontSize="inherit" />
+                              </IconButton>
+                            </Tooltip>
                           </TableCell>
                         </TableRow>
                       ))}

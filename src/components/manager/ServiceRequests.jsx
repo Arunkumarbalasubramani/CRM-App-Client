@@ -27,7 +27,8 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import TableHead from "@mui/material/TableHead";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { Nav } from "react-bootstrap";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -203,6 +204,8 @@ const ServiceRequests = () => {
                         <StyledTableCell align="center">
                           Piority
                         </StyledTableCell>
+                        <StyledTableCell align="center"></StyledTableCell>
+                        <StyledTableCell align="center"></StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -250,6 +253,39 @@ const ServiceRequests = () => {
                           </TableCell>
                           <TableCell style={{ width: 160 }} align="center">
                             {row.priority}
+                          </TableCell>
+                          <TableCell style={{ width: 160 }} align="center">
+                            <Tooltip title="Edit" arrow placement="right-start">
+                              <IconButton
+                                aria-label="edit"
+                                size="large"
+                                onClick={() =>
+                                  navigate(
+                                    `/user/servicerequest/${row.requestId}/edit`
+                                  )
+                                }
+                              >
+                                <EditIcon fontSize="inherit" />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell style={{ width: 160 }} align="center">
+                            <Tooltip
+                              title="Delete"
+                              arrow
+                              placement="right-start"
+                            >
+                              <IconButton aria-label="delete" size="large">
+                                <DeleteIcon
+                                  fontSize="inherit"
+                                  onClick={() => {
+                                    navigate(
+                                      `/user/ServiceRequest/${row.requestId}/delete`
+                                    );
+                                  }}
+                                />
+                              </IconButton>
+                            </Tooltip>
                           </TableCell>
                         </TableRow>
                       ))}

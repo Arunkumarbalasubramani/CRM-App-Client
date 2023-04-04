@@ -51,7 +51,7 @@ const CreateContact = () => {
   return (
     <div className="main-container">
       <div className="header-container">
-        <h3 className="heading-text">Create Leads</h3>
+        <h3 className="heading-text">Create Contact</h3>
       </div>
       {success ? (
         <div className="createform-container">

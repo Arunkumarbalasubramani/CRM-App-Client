@@ -1,10 +1,11 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { useParams } from "react-router";
+import Details from "./Details";
 
 const MoreDetails = () => {
   const { requestId } = useParams();
-  const [servicerequestData, setServicerequestData] = useState([]);
+  const [servicerequestData, setServicerequestData] = useState(null);
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(
@@ -14,13 +15,17 @@ const MoreDetails = () => {
     };
     getData();
   }, [requestId]);
-  console.log(servicerequestData);
+
   return (
     <div className="main-container">
       <div className="header-container">
         <h3 className="heading-text">More Info</h3>
       </div>
-      <div className="moreInfo-container"></div>
+      <div className="body-container">
+        {servicerequestData ? (
+          <Details servicerequestData={servicerequestData} />
+        ) : null}
+      </div>
     </div>
   );
 };

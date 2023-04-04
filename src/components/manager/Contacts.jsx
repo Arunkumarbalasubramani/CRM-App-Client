@@ -10,9 +10,9 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import SearchIcon from "@mui/icons-material/Search";
-import Paper from "@mui/material/Paper";
 
+import Paper from "@mui/material/Paper";
+import EditIcon from "@mui/icons-material/Edit";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -200,6 +200,7 @@ const Contacts = () => {
                         <StyledTableCell align="center">
                           Contact Owner
                         </StyledTableCell>
+                        <StyledTableCell align="center"></StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -230,6 +231,19 @@ const Contacts = () => {
                           </TableCell>
                           <TableCell style={{ width: 160 }} align="center">
                             Manager
+                          </TableCell>
+                          <TableCell style={{ width: 160 }} align="center">
+                            <Tooltip title="Edit" arrow placement="right-start">
+                              <IconButton
+                                aria-label="edit"
+                                size="large"
+                                onClick={() =>
+                                  navigate(`/:role/contacts/${row._id}/edit`)
+                                }
+                              >
+                                <EditIcon fontSize="inherit" />
+                              </IconButton>
+                            </Tooltip>
                           </TableCell>
                         </TableRow>
                       ))}
