@@ -15,12 +15,14 @@ import Tooltip from "@mui/material/Tooltip";
 const EditContact = () => {
   const { id, role } = useParams();
   const [contactsData, setContactsData] = useState(null);
+
   useEffect(() => {
     const getContactsdata = async () => {
       const response = await axios.get(
-        `http://localhost:5000/crm/contacts/${id}`
+        `http://localhost:5000/crm/contacts/find/${id}`
       );
-      setContactsData(response.data[0]);
+
+      setContactsData(response.data);
     };
     getContactsdata();
   }, []);
@@ -28,7 +30,7 @@ const EditContact = () => {
   return (
     <div className="main-container">
       <div className="header-container">
-        <h3 className="heading-text">{`Edit Lead`}</h3>
+        <h3 className="heading-text">{`Edit Contact`}</h3>
       </div>
       {contactsData ? (
         <EditContactForm contactsData={contactsData} id={id} />
@@ -43,21 +45,22 @@ export default EditContact;
 
 export const EditContactForm = ({ contactsData, id }) => {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(true);
+  const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const { contactName, accountName, contactEmail, phone, address } =
     contactsData;
   const navigate = useNavigate();
   const { handleSubmit, handleChange, handleBlur, values } = useFormik({
     initialValues: {
-      contactName: "",
-      accountName: "",
-      contactEmail: "",
-      phone: "",
-      address: "",
+      contactName: contactName,
+      accountName: accountName,
+      contactEmail: contactEmail,
+      phone: phone,
+      address: address,
     },
 
     onSubmit: (editedContact) => {
+      // console.log(editedContact);
       editContactFunction(editedContact);
     },
   });
@@ -65,7 +68,7 @@ export const EditContactForm = ({ contactsData, id }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:5000/crm/leads/${id}/edit`,
+        `http://localhost:5000/crm/contacts/${id}/edit`,
         editedContact
       );
       setSuccess(true);
@@ -86,7 +89,7 @@ export const EditContactForm = ({ contactsData, id }) => {
           <h1>Contact Edited Successfully</h1>
           <Tooltip title="Back">
             <IconButton size="large">
-              <ArrowBackIosIcon onClick={() => navigate("/manager/leads")} />
+              <ArrowBackIosIcon onClick={() => navigate("/manager/contacts")} />
             </IconButton>
           </Tooltip>
         </div>

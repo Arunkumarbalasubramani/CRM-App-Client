@@ -31,7 +31,7 @@ import TableHead from "@mui/material/TableHead";
 import { tableCellClasses } from "@mui/material/TableCell";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import PasswordIcon from "@mui/icons-material/Password";
 
@@ -126,11 +126,16 @@ TablePaginationActions.propTypes = {
 };
 
 function DashboardContent() {
+  const { token } = useParams();
   const [rows, setRows] = useState([]);
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/users");
+        const response = await axios.get("http://localhost:5000/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setRows(response.data);
       } catch (error) {
         console.log(error);

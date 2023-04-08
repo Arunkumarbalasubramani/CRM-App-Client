@@ -105,7 +105,7 @@ const Contacts = () => {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -196,7 +196,9 @@ const Contacts = () => {
                         <StyledTableCell align="center">
                           Account
                         </StyledTableCell>
-
+                        <StyledTableCell align="center">
+                          Address
+                        </StyledTableCell>
                         <StyledTableCell align="center">
                           Contact Owner
                         </StyledTableCell>
@@ -228,6 +230,9 @@ const Contacts = () => {
                           </TableCell>
                           <TableCell style={{ width: 160 }} align="center">
                             {row.accountName}
+                          </TableCell>
+                          <TableCell style={{ width: 160 }} align="center">
+                            {row.address}
                           </TableCell>
                           <TableCell style={{ width: 160 }} align="center">
                             Manager

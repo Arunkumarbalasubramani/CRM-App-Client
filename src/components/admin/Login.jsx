@@ -20,6 +20,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 const theme = createTheme();
 
@@ -29,6 +30,7 @@ const loginValidationSchema = yup.object({
 });
 const Login = () => {
   const navigate = useNavigate();
+
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -39,6 +41,12 @@ const Login = () => {
         "http://localhost:5000/users/login",
         loginData
       );
+      const data = response.data.accessToken;
+
+      const decodedData = jwt_decode(data);
+      console.log(decodedData);
+      const { userName, roles } = decodedData;
+      navigate(`/${userName}/${roles}/dashboard`);
       setSuccess(true);
       setLoading(false);
     } catch (error) {

@@ -21,27 +21,35 @@ import Contacts from "./components/manager/Contacts";
 import Leads from "./components/manager/Leads";
 import MoreDetails from "./components/manager/MoreDetails";
 import DeletePage from "./components/manager/DeletePage";
+
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<Login />} />
+
           <Route path="/" element={<Login />} />
           <Route path="/user/register" element={<Registration />} />
           <Route
             path="/user/:useremail/resetpassword"
             element={<Passwordreset />}
           />
-          <Route path="/login" element={<Login />} />
 
           <Route
             path="/passwordreset/:id/:token"
             element={<ResetPasswordForm />}
           />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route
+            path=":userName/admin/dashboard"
+            element={<AdminDashboard />}
+          />
 
-          <Route path="/manager/dashboard" element={<ManagerDashboard />} />
-          <Route path="/user/dashboard" element={<UserDashboard />} />
+          <Route
+            path=":userName/manager/dashboard"
+            element={<ManagerDashboard />}
+          />
+          <Route path=":userName/user/dashboard" element={<UserDashboard />} />
           <Route
             path="/:role/servicerequest/add"
             element={<CreateServiceRequest />}
