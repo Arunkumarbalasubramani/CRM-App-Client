@@ -131,11 +131,14 @@ function DashboardContent() {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://crm-server-akb.onrender.com/users",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setRows(response.data);
       } catch (error) {
         console.log(error);

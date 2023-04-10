@@ -41,7 +41,9 @@ function DashboardContent() {
   useEffect(() => {
     const getDashBoardData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/crm/dashboard");
+        const response = await axios.get(
+          "https://crm-server-akb.onrender.com/crm/dashboard"
+        );
 
         setDashBoardData(response.data);
       } catch (error) {

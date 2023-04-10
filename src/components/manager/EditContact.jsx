@@ -19,7 +19,7 @@ const EditContact = () => {
   useEffect(() => {
     const getContactsdata = async () => {
       const response = await axios.get(
-        `http://localhost:5000/crm/contacts/find/${id}`
+        `https://crm-server-akb.onrender.com/crm/contacts/find/${id}`
       );
 
       setContactsData(response.data);

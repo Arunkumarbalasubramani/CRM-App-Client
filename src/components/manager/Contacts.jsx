@@ -129,14 +129,18 @@ const Contacts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     const getContactsdata = async () => {
-      const response = await axios.get("http://localhost:5000/crm/contacts");
+      const response = await axios.get(
+        "https://crm-server-akb.onrender.com/crm/contacts"
+      );
       setRows(response.data);
     };
     getContactsdata();
   }, []);
   useEffect(() => {
     const getsearchedData = async () => {
-      const response = await axios.get("http://localhost:5000/crm/contacts");
+      const response = await axios.get(
+        "https://crm-server-akb.onrender.com/crm/contacts"
+      );
       const newRows = response.data.filter((row) =>
         row.contactName.toLowerCase().includes(searchTerm)
       );

@@ -130,14 +130,18 @@ const Leads = () => {
   const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     const getLeadsData = async () => {
-      const response = await axios.get("http://localhost:5000/crm/leads");
+      const response = await axios.get(
+        "https://crm-server-akb.onrender.com/crm/leads"
+      );
       setRows(response.data);
     };
     getLeadsData();
   }, []);
   useEffect(() => {
     const getsearchedData = async () => {
-      const response = await axios.get("http://localhost:5000/crm/leads");
+      const response = await axios.get(
+        "https://crm-server-akb.onrender.com/crm/leads"
+      );
       const newRows = response.data.filter((row) =>
         row.leadName.toLowerCase().includes(searchTerm)
       );

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,18 +10,14 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router";
 import { Nav } from "react-bootstrap";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";
 import CircularProgress from "@mui/material/CircularProgress";
-import HomeIcon from "@mui/icons-material/Home";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
-
+import useAuth from "../../hooks/useAuth";
+import { useNavigate, useLocation } from "react-router-dom";
 const theme = createTheme();
 
 const loginValidationSchema = yup.object({
@@ -30,25 +26,28 @@ const loginValidationSchema = yup.object({
 });
 const Login = () => {
   const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const loginFunction = async (loginData) => {
     try {
       setLoading(true);
+      const { email, password } = loginData;
       const response = await axios.post(
-        "http://localhost:5000/users/login",
-        loginData
+        "https://crm-server-akb.onrender.com/users/login",
+        loginData,
+        {
+          withCredentials: true,
+        }
       );
-      const data = response.data.accessToken;
 
-      const decodedData = jwt_decode(data);
-      console.log(decodedData);
-      const { userName, roles } = decodedData;
-      navigate(`/${userName}/${roles}/dashboard`);
-      setSuccess(true);
+      const accessToken = response.data.accessToken;
+      const roles = response.data.roles;
+      setAuth({ email, password, accessToken, roles });
       setLoading(false);
+
+      navigate(`/${roles}/dashboard `, { replace: true });
     } catch (error) {
       if (!error?.response) {
         setErrorMsg("No Server Response");
@@ -59,12 +58,16 @@ const Login = () => {
       } else if (error?.response.status === 403) {
         setErrorMsg("Wrong Credentials");
         setLoading(false);
+      } else if (error?.response.status === 401) {
+        setErrorMsg("UnAuthorized");
+        setLoading(false);
       } else {
         setErrorMsg(error?.response.data.Error);
         setLoading(false);
       }
     }
   };
+
   const { handleSubmit, handleBlur, handleChange, touched, errors, values } =
     useFormik({
       initialValues: {
@@ -119,67 +122,57 @@ const Login = () => {
                 <Alert variant="danger">{errorMsg}</Alert>
               </div>
             ) : null}
-            {success ? (
-              <div className="success-container">
-                <h1>User Logged In Successfully</h1>
-                <Tooltip title="Go to Home">
-                  <IconButton size="large">
-                    <HomeIcon onClick={() => navigate("/:userType/homepage")} />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            ) : (
-              <div className="form-container">
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <TextField
-                      id="outlined-basic"
-                      label="Email"
-                      variant="outlined"
-                      className="form-input"
-                      value={values.email}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      name="email"
-                      error={touched.email && errors.email}
-                    />
-                    {touched.email && errors.email ? (
-                      <Alert variant="danger">{errors.email}</Alert>
-                    ) : null}
-                  </Form.Group>
 
-                  <Form.Group className="mb-3">
-                    <TextField
-                      id="outlined-basic"
-                      name="password"
-                      label="Password"
-                      type="password"
-                      value={values.password}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={touched.password && errors.password}
-                      variant="outlined"
-                      className="form-input"
-                    />
-                    {touched.password && errors.password ? (
-                      <Alert variant="danger">{errors.password}</Alert>
-                    ) : null}
-                  </Form.Group>
+            <div className="form-container">
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                  <TextField
+                    id="outlined-basic"
+                    label="Email"
+                    variant="outlined"
+                    className="form-input"
+                    value={values.email}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    name="email"
+                    error={touched.email && errors.email}
+                  />
+                  {touched.email && errors.email ? (
+                    <Alert variant="danger">{errors.email}</Alert>
+                  ) : null}
+                </Form.Group>
 
-                  <Button variant="contained" size="large" type="submit">
-                    Submit
-                  </Button>
-                </Form>
-                <div className="further-actions">
-                  <Nav.Link variant="body2" className="further-link">
-                    Not Registered? Contact Your Admin
-                  </Nav.Link>
-                  <Nav.Link variant="body2" className="further-link">
-                    {"Forgot Password. Contact Your Admin"}
-                  </Nav.Link>
-                </div>
+                <Form.Group className="mb-3">
+                  <TextField
+                    id="outlined-basic"
+                    name="password"
+                    label="Password"
+                    type="password"
+                    value={values.password}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    error={touched.password && errors.password}
+                    variant="outlined"
+                    className="form-input"
+                  />
+                  {touched.password && errors.password ? (
+                    <Alert variant="danger">{errors.password}</Alert>
+                  ) : null}
+                </Form.Group>
+
+                <Button variant="contained" size="large" type="submit">
+                  Submit
+                </Button>
+              </Form>
+              <div className="further-actions">
+                <Nav.Link variant="body2" className="further-link">
+                  Not Registered? Contact Your Admin
+                </Nav.Link>
+                <Nav.Link variant="body2" className="further-link">
+                  {"Forgot Password. Contact Your Admin"}
+                </Nav.Link>
               </div>
-            )}
+            </div>
           </Box>
         </Grid>
       </Grid>

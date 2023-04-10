@@ -41,7 +41,7 @@ const ResetPasswordForm = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:5000/users/passwordreset/${id}/${token}`,
+        `https://crm-server-akb.onrender.com/users/passwordreset/${id}/${token}`,
         passwordData
       );
       setSuccess(true);

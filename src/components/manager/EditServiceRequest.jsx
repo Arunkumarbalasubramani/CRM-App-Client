@@ -19,7 +19,7 @@ const EditServiceRequest = () => {
   useEffect(() => {
     const getSRDataToEdit = async () => {
       const response = await axios.get(
-        `http://localhost:5000/crm/service-requests/${id}`
+        `https://crm-server-akb.onrender.com/crm/service-requests/${id}`
       );
       setSRData(response.data);
     };

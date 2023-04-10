@@ -19,7 +19,7 @@ const CreateLeads = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/crm/leads/add",
+        "https://crm-server-akb.onrender.com/crm/leads/add",
         newLeadData
       );
       setSuccess(true);

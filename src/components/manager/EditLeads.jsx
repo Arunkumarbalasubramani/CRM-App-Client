@@ -17,7 +17,9 @@ const EditLeads = () => {
   const [leadsData, setLeadsData] = useState(null);
   useEffect(() => {
     const getLeadsData = async () => {
-      const response = await axios.get(`http://localhost:5000/crm/leads/${id}`);
+      const response = await axios.get(
+        `https://crm-server-akb.onrender.com/crm/leads/${id}`
+      );
       setLeadsData(response.data[0]);
     };
     getLeadsData();

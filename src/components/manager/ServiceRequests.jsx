@@ -106,7 +106,7 @@ const ServiceRequests = () => {
   useEffect(() => {
     const getServiceRequest = async () => {
       const response = await axios.get(
-        "http://localhost:5000/crm/service-requests"
+        "https://crm-server-akb.onrender.com/crm/service-requests"
       );
       setRows(response.data);
     };
@@ -115,7 +115,7 @@ const ServiceRequests = () => {
   useEffect(() => {
     const getsearchedData = async () => {
       const response = await axios.get(
-        "http://localhost:5000/crm/service-requests"
+        "https://crm-server-akb.onrender.com/crm/service-requests"
       );
       const newRows = response.data.filter((row) =>
         row.requestId.toLowerCase().includes(searchTerm)

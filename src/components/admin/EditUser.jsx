@@ -27,7 +27,7 @@ const EditUser = () => {
     const getEditData = async () => {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/users/find/${useremail}`
+        `https://crm-server-akb.onrender.com/users/find/${useremail}`
       );
       setUserData(response.data);
       setLoading(false);

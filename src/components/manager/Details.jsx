@@ -22,7 +22,7 @@ const Details = ({ servicerequestData }) => {
   useEffect(() => {
     const getContactDetails = async () => {
       const response = await axios.get(
-        `http://localhost:5000/crm/contacts/${customer}`
+        `https://crm-server-akb.onrender.com/crm/contacts/${customer}`
       );
       setContacts(response.data[0]);
     };

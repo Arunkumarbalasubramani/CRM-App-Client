@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
@@ -114,9 +114,9 @@ const settings = ["Logout"];
 
 function DashboardContent() {
   const navigate = useNavigate();
-
+  const { role } = useParams();
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [rights, setRights] = useState({});
+  const [roles, setRoles] = useState({});
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -130,9 +130,11 @@ function DashboardContent() {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/users");
+        const response = await axios.get(
+          "https://crm-server-akb.onrender.com/users"
+        );
         const filteredRows = response.data.filter(
-          (user) => user.role === "employee"
+          (user) => user.role !== "manager" && user.role !== "admin"
         );
         setRows(filteredRows);
       } catch (error) {
@@ -140,12 +142,15 @@ function DashboardContent() {
       }
     };
     getUserData();
-  }, [rights]);
+  }, [roles]);
 
-  const updateUserRights = async (userId, updatedRights) => {
-    const request = { userId: userId, updatedRights: updatedRights };
-    setRights(request);
-    await axios.post("http://localhost:5000/users/change-rights", request);
+  const updateUserRoles = async (userId, updatedRoles) => {
+    const request = { userId: userId, updatedRoles: updatedRoles };
+    setRoles(request);
+    await axios.post(
+      "https://crm-server-akb.onrender.com/users/change-roles",
+      request
+    );
   };
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -179,7 +184,7 @@ function DashboardContent() {
           <Container maxWidth="xl">
             <Toolbar disableGutters className="nav-bar">
               <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-              <h4>Manager Dashboard</h4>
+              <h4> {role.toUpperCase()} DASHBOARD</h4>
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -264,104 +269,114 @@ function DashboardContent() {
           </Card>
         </div>
       </Box>
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Grid item xs={12}>
-          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-            <TableContainer component={Paper}>
-              <Table
-                sx={{ minWidth: 500 }}
-                aria-label="custom pagination table"
-              >
-                {" "}
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">First Name</StyledTableCell>
-                    <StyledTableCell align="center">Last Name</StyledTableCell>
-                    <StyledTableCell align="center">Email Name</StyledTableCell>
+      {role === "manager" ? (
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+              <TableContainer component={Paper}>
+                <Table
+                  sx={{ minWidth: 500 }}
+                  aria-label="custom pagination table"
+                >
+                  {" "}
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">
+                        First Name
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Last Name
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Email Name
+                      </StyledTableCell>
 
-                    <StyledTableCell align="center">Role</StyledTableCell>
-                    <StyledTableCell align="center">Rights</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(rowsPerPage > 0
-                    ? rows.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : rows
-                  ).map((row) => (
-                    <TableRow key={row.name}>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        style={{ width: 160 }}
-                        align="center"
-                      >
-                        {row.fname}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
-                        {row.lname}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
-                        {row.email}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
-                        {row.role}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
-                        <select
-                          id="rights"
-                          onChange={(event) =>
-                            updateUserRights(row._id, event.target.value)
-                          }
-                          value={row.rights}
+                      <StyledTableCell align="center">
+                        Existing Role
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Change Role
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(rowsPerPage > 0
+                      ? rows.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                      : rows
+                    ).map((row) => (
+                      <TableRow key={row.name}>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          style={{ width: 160 }}
+                          align="center"
                         >
-                          <option value="none">None</option>
-                          <option value="update">Update</option>
-                          <option value="create&update">
-                            Create and Update
-                          </option>
-                        </select>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                          {row.fname}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row.lname}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row.email}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row.role}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          <select
+                            id="rights"
+                            onChange={(event) =>
+                              updateUserRoles(row._id, event.target.value)
+                            }
+                            value={row.rights}
+                          >
+                            <option value="none">None</option>
+                            <option value="creator">Creator</option>
+                            <option value="editor">Editor</option>
+                          </select>
+                        </TableCell>
+                      </TableRow>
+                    ))}
 
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 53 * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                  <TableFooter className=" table-footer">
+                    <TableRow>
+                      <TablePagination
+                        rowsPerPageOptions={[
+                          5,
+                          10,
+                          15,
+                          { label: "All", value: -1 },
+                        ]}
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                          inputProps: {
+                            "aria-label": "rows per page",
+                          },
+                          native: true,
+                        }}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                      />
                     </TableRow>
-                  )}
-                </TableBody>
-                <TableFooter className=" table-footer">
-                  <TableRow>
-                    <TablePagination
-                      rowsPerPageOptions={[
-                        5,
-                        10,
-                        15,
-                        { label: "All", value: -1 },
-                      ]}
-                      count={rows.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      SelectProps={{
-                        inputProps: {
-                          "aria-label": "rows per page",
-                        },
-                        native: true,
-                      }}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                      ActionsComponent={TablePaginationActions}
-                    />
-                  </TableRow>
-                </TableFooter>
-              </Table>
-            </TableContainer>
-          </Paper>
-        </Grid>
-      </Container>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Grid>
+        </Container>
+      ) : null}
     </ThemeProvider>
   );
 }

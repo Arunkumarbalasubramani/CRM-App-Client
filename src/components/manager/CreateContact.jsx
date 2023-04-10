@@ -19,7 +19,7 @@ const CreateContact = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/crm/contacts/add",
+        "https://crm-server-akb.onrender.com/crm/contacts/add",
         newContactData
       );
       setSuccess(true);

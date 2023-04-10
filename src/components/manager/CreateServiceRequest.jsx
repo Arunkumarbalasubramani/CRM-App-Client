@@ -19,7 +19,7 @@ const CreateServiceRequest = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/crm/service-requests/add",
+        "https://crm-server-akb.onrender.com/crm/service-requests/add",
         newSRData
       );
       setSuccess(true);

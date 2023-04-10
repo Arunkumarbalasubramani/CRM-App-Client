@@ -51,7 +51,7 @@ const EditForm = ({ userData }) => {
       const data = { _id: _id, role: role };
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/users/change-role",
+        "https://crm-server-akb.onrender.com/users/change-role",
         data
       );
       setSuccess(true);

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Kalam&display=swap");
+
 .App {
   text-align: center;
 }
@@ -202,4 +204,21 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+.image {
+  height: 60vh;
+  width: 90%;
+  object-fit: contain;
+}
+.img-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+.alertText {
+  font-weight: 600;
+  font-family: "Kalam", cursive;
 }

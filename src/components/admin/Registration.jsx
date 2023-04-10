@@ -47,7 +47,10 @@ const Registration = () => {
   const registerUserFunction = async (userData) => {
     try {
       setLoading(true);
-      await axios.post("http://localhost:5000/users/register_user", userData);
+      await axios.post(
+        "https://crm-server-akb.onrender.com/users/register_user",
+        userData
+      );
       setSuccess(true);
       setLoading(false);
     } catch (error) {

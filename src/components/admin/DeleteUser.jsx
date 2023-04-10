@@ -27,7 +27,7 @@ const DeleteUser = () => {
       try {
         setLoading(true);
         await axios.post(
-          `http://localhost:5000/users/delete/${useremail}`,
+          `https://crm-server-akb.onrender.com/users/delete/${useremail}`,
           useremail
         );
         setSuccess(true);

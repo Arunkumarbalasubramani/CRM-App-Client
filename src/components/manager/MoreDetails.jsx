@@ -9,7 +9,7 @@ const MoreDetails = () => {
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(
-        `http://localhost:5000/crm/service-requests/${requestId}`
+        `https://crm-server-akb.onrender.com/crm/service-requests/${requestId}`
       );
       setServicerequestData(response.data);
     };
