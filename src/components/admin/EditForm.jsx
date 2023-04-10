@@ -1,42 +1,19 @@
-import { React, useEffect, useState } from "react";
-import Avatar from "@mui/material/Avatar";
+import { React, useState } from "react";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate, useParams } from "react-router";
+
+import { useNavigate } from "react-router";
 import { Nav } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
-import * as yup from "yup";
+
 import { useFormik } from "formik";
 import axios from "axios";
-import CircularProgress from "@mui/material/CircularProgress";
+
 import LoginIcon from "@mui/icons-material/Login";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
-
-const theme = createTheme();
-const userValidationSchema = yup.object({
-  email: yup
-    .string()
-    .email("Should be a Valid Email")
-    .required("Email is Mandatory"),
-  fname: yup.string().required("Please Enter Your First Name"),
-  lname: yup.string().required("Please Enter Your Last Name"),
-  password: yup
-    .string()
-    .required("Password is Mandatory")
-    .min(8, "Must be atleast 8 Characters Long")
-    .max(12, "Not More than 12 Characters"),
-  role: yup.string().required(),
-});
 
 const EditForm = ({ userData }) => {
   const [success, setSuccess] = useState(false);

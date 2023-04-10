@@ -1,12 +1,11 @@
 import { React, useEffect, useState } from "react";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -27,7 +26,7 @@ const settings = ["Logout"];
 
 function DashboardContent() {
   const navigate = useNavigate();
-  const [hasRights, sethasRights] = useState(false);
+  const [hasRights] = useState(false);
   const [dashBoardData, setDashBoardData] = useState("");
   const [anchorElUser, setAnchorElUser] = useState(null);
 

@@ -32,22 +32,21 @@ const CreateLeads = () => {
       }
     }
   };
-  const { handleSubmit, handleChange, handleBlur, touched, errors, values } =
-    useFormik({
-      initialValues: {
-        leadName: "",
-        leadEmail: "",
-        company: "",
-        phone: "",
-        leadSource: "",
-        remarks: "",
-        status: "",
-      },
+  const { handleSubmit, handleChange, handleBlur, values } = useFormik({
+    initialValues: {
+      leadName: "",
+      leadEmail: "",
+      company: "",
+      phone: "",
+      leadSource: "",
+      remarks: "",
+      status: "",
+    },
 
-      onSubmit: (newLeadData) => {
-        addLeadFunction(newLeadData);
-      },
-    });
+    onSubmit: (newLeadData) => {
+      addLeadFunction(newLeadData);
+    },
+  });
 
   return (
     <div className="main-container">

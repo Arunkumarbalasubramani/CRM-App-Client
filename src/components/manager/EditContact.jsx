@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 const EditContact = () => {
-  const { id, role } = useParams();
+  const { id } = useParams();
   const [contactsData, setContactsData] = useState(null);
 
   useEffect(() => {

@@ -20,7 +20,6 @@ import LoginIcon from "@mui/icons-material/Login";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Form from "react-bootstrap/Form";
-import Dropdown from "react-bootstrap/Dropdown";
 
 const theme = createTheme();
 const userValidationSchema = yup.object({

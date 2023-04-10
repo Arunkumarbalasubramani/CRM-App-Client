@@ -20,7 +20,6 @@ import ServiceRequests from "./components/manager/ServiceRequests";
 import Contacts from "./components/manager/Contacts";
 import Leads from "./components/manager/Leads";
 import MoreDetails from "./components/manager/MoreDetails";
-import DeletePage from "./components/manager/DeletePage";
 import Layout from "./components/Layout";
 import Missing from "./components/Missing";
 import UnAuthorized from "./components/UnAuthorized";

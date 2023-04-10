@@ -32,21 +32,20 @@ const CreateContact = () => {
       }
     }
   };
-  const { handleSubmit, handleChange, handleBlur, touched, errors, values } =
-    useFormik({
-      initialValues: {
-        contactName: "",
-        accountName: "",
-        contactEmail: "",
-        phone: "",
-        address: "",
-      },
+  const { handleSubmit, handleChange, handleBlur, values } = useFormik({
+    initialValues: {
+      contactName: "",
+      accountName: "",
+      contactEmail: "",
+      phone: "",
+      address: "",
+    },
 
-      onSubmit: (newContactData) => {
-        addContactFunction(newContactData);
-        // console.log(newContactData);
-      },
-    });
+    onSubmit: (newContactData) => {
+      addContactFunction(newContactData);
+      // console.log(newContactData);
+    },
+  });
 
   return (
     <div className="main-container">

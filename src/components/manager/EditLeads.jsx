@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const EditLeads = () => {
-  const { id, role } = useParams();
+  const { id } = useParams();
   const [leadsData, setLeadsData] = useState(null);
   useEffect(() => {
     const getLeadsData = async () => {
